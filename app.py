@@ -52,6 +52,7 @@ label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
 data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
 data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability'])
+st.write("## Data")
 print(data)
 
 scaler = StandardScaler()

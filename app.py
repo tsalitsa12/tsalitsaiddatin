@@ -47,10 +47,12 @@ sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
 st.pyplot(fig)
 
 # Pra-pemrosesan data
+st.write("## pemrosesan data")
 label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
 data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
 data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability'])
+print(data)
 
 scaler = StandardScaler()
 data[['Price']] = scaler.fit_transform(data[['Price']])

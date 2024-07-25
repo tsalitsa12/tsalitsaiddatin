@@ -136,7 +136,6 @@ fig, ax = plt.subplots()
 sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
 st.pyplot(fig)
 
-# Cross-validation untuk setiap model
 # Mendefinisikan model dengan parameter terbaik
 log_model = LogisticRegression(C=0.01, solver='liblinear')
 dt_model = DecisionTreeClassifier(max_depth=3, min_samples_split=2, min_samples_leaf=1)
@@ -160,6 +159,30 @@ st.title('Model Evaluation with Cross-Validation')
 # Tabel hasil cross-validation
 st.subheader('Cross-Validation Results')
 st.write(results)
+
+# Menyimpan hasil akurasi
+accuracy_scores = {
+    'Logistic Regression': log_scores.mean(),
+    'Decision Tree': dt_scores.mean(),
+    'SVM': svm_scores.mean()
+}
+
+# Pastikan accuracy_scores tidak kosong sebelum menentukan model terbaik
+if accuracy_scores:
+    try:
+        # Menentukan model terbaik
+        best_model_name = max(accuracy_scores, key=accuracy_scores.get)
+        best_model_accuracy = accuracy_scores[best_model_name]
+
+        # Menampilkan model terbaik dengan Streamlit
+        st.subheader('Best Model')
+        st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")
+    except Exception as e:
+        st.subheader('Error')
+        st.write(f"Terjadi kesalahan: {e}")
+else:
+    st.subheader('Best Model')
+    st.write("Tidak ada data untuk menentukan model terbaik.")
 
 # Penyesuaian hiperparameter untuk Logistic Regression
 log_param_grid = {
@@ -211,11 +234,3 @@ st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
 st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
 st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
 st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
-
-# Menentukan model terbaik
-best_model_name = max(accuracy_scores, key=accuracy_scores.get)
-best_model_accuracy = accuracy_scores[best_model_name]
-
-# Menampilkan model terbaik dengan Streamlit
-st.subheader('Best Model')
-st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")

@@ -25,6 +25,7 @@ data = load_data()
 # Menampilkan deskripsi data
 st.write("## Data Info")
 st.write(data.info())
+st.write("## Data Describe")
 st.write(data.describe())
 
 # Visualisasi distribusi kategori menu

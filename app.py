@@ -147,21 +147,19 @@ log_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
 dt_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
 svm_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
 
-# Menampilkan hasil cross-validation dengan Streamlit
+# Menyiapkan DataFrame untuk hasil
+results = pd.DataFrame({
+    'Model': ['Logistic Regression', 'Decision Tree', 'SVM'],
+    'Cross-Validation Scores': [list(log_scores), list(dt_scores), list(svm_scores)],
+    'Mean CV Accuracy': [log_scores.mean(), dt_scores.mean(), svm_scores.mean()]
+})
+
+# Menampilkan hasil dengan Streamlit
 st.title('Model Evaluation with Cross-Validation')
 
-# Menampilkan hasil cross-validation
-st.subheader('Logistic Regression')
-st.write('Cross-Validation Accuracies:', log_scores)
-st.write('Mean CV Accuracy:', log_scores.mean())
-
-st.subheader('Decision Tree')
-st.write('Cross-Validation Accuracies:', dt_scores)
-st.write('Mean CV Accuracy:', dt_scores.mean())
-
-st.subheader('SVM')
-st.write('Cross-Validation Accuracies:', svm_scores)
-st.write('Mean CV Accuracy:', svm_scores.mean())
+# Tabel hasil cross-validation
+st.subheader('Cross-Validation Results')
+st.write(results)
 
 # Penyesuaian hiperparameter untuk Logistic Regression
 log_param_grid = {

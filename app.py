@@ -52,12 +52,12 @@ label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
 data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
 data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability'])
-st.write("## Data")
-print(data)
+
+st.write("## Data setelah transformasi")
+st.write(data)
 
 scaler = StandardScaler()
 data[['Price']] = scaler.fit_transform(data[['Price']])
-
 # Memisahkan fitur dan target
 X = data[['Price']]
 y = data['Profitability']

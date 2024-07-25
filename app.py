@@ -16,7 +16,7 @@ st.markdown(
     """
     <style>
     .reportview-container {
-        background-color: #f0f0f0; /* Warna latar belakang */
+        background-color: 	#F0F8FF; /* Warna latar belakang */
     }
     .sidebar .sidebar-content {
         background-color: #ffffff; /* Warna latar belakang sidebar */

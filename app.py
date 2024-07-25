@@ -194,12 +194,3 @@ st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
 st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
 st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
 st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
-
-# Menampilkan peta nilai
-menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
-profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
-
-st.write("## Mapping Kategori Menu")
-st.write(menu_category_mapping)
-st.write("## Mapping Profitabilitas")
-st.write(profitability_mapping)

@@ -20,6 +20,8 @@ def load_data():
     return data
 
 data = load_data()
+st.write("## Dataset")
+data
 
 # Menampilkan deskripsi data
 st.write("## Data Info")

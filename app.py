@@ -11,21 +11,6 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import io
 import json
 
-# Menambahkan CSS untuk latar belakang
-st.markdown(
-    """
-    <style>
-    .reportview-container .main .block-container {
-        background-color: #f0f0f0; /* Warna latar belakang utama */
-    }
-    .sidebar .sidebar-content {
-        background-color: #ffffff; /* Warna latar belakang sidebar */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
 
@@ -37,7 +22,7 @@ def load_data():
 
 data = load_data()
 st.write("## Dataset")
-st.write(data)
+data
 
 # Menampilkan deskripsi data
 st.write("## Data Info")

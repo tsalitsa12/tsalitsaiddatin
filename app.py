@@ -14,12 +14,15 @@ import json
 # Menambahkan CSS untuk latar belakang
 st.markdown(
     """
-    <style>
+   <style>
     .reportview-container {
-        background-color: 	#F0F8FF; /* Warna latar belakang */
+        background-color: #f0f0f0; /* Warna latar belakang utama */
     }
     .sidebar .sidebar-content {
         background-color: #ffffff; /* Warna latar belakang sidebar */
+    }
+    .main .block-container {
+        background-color: #ffffff; /* Warna latar belakang konten utama */
     }
     </style>
     """,

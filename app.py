@@ -65,10 +65,10 @@ menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu
 profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
 
 st.write("## Mapping Kategori Menu")
-st.markdown("```json\n" + json.dumps(menu_category_mapping, indent=4) + "\n```")
+st.json(menu_category_mapping, expanded=True)
 
 st.write("## Mapping Profitabilitas")
-st.markdown("```json\n" + json.dumps(profitability_mapping, indent=4) + "\n```")
+st.json(profitability_mapping, expanded=True)
 
 # Memisahkan fitur dan target
 X = data[['Price']]

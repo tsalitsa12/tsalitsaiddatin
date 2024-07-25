@@ -9,6 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import io
+import json
 
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
@@ -64,9 +65,10 @@ menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu
 profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
 
 st.write("## Mapping Kategori Menu")
-st.write(menu_category_mapping)
+st.markdown("```json\n" + json.dumps(menu_category_mapping, indent=4) + "\n```")
+
 st.write("## Mapping Profitabilitas")
-st.write(profitability_mapping)
+st.markdown("```json\n" + json.dumps(profitability_mapping, indent=4) + "\n```")
 
 # Memisahkan fitur dan target
 X = data[['Price']]

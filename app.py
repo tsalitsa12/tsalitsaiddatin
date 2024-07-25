@@ -119,6 +119,67 @@ fig, ax = plt.subplots()
 sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
 st.pyplot(fig)
 
+# Cross-validation untuk setiap model
+log_cv_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
+dt_cv_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
+svm_cv_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
+
+st.write("## Cross-validation Scores")
+st.write(f"Logistic Regression CV Accuracy: {log_cv_scores.mean()}")
+st.write(f"Decision Tree CV Accuracy: {dt_cv_scores.mean()}")
+st.write(f"SVM CV Accuracy: {svm_cv_scores.mean()}")
+
+# Penyesuaian hiperparameter untuk Logistic Regression
+log_param_grid = {
+    'C': [0.01, 0.1, 1, 10, 100],
+    'solver': ['liblinear', 'lbfgs']
+}
+log_grid_search = GridSearchCV(LogisticRegression(), log_param_grid, cv=5, scoring='accuracy')
+log_grid_search.fit(X_train, y_train)
+log_best_model = log_grid_search.best_estimator_
+log_preds_best = log_best_model.predict(X_test)
+
+st.write("## Logistic Regression Best Params")
+st.write(log_grid_search.best_params_)
+st.write("Logistic Regression Best Accuracy:", accuracy_score(y_test, log_preds_best))
+st.write("Precision:", precision_score(y_test, log_preds_best, average='weighted'))
+st.write("Recall:", recall_score(y_test, log_preds_best, average='weighted'))
+st.write("F1 Score:", f1_score(y_test, log_preds_best, average='weighted'))
+
+# Penyesuaian hiperparameter untuk Decision Tree
+dt_param_grid = {
+    'max_depth': [3, 5, 7, 10, None],
+    'min_samples_split': [2, 5, 10]
+}
+dt_grid_search = GridSearchCV(DecisionTreeClassifier(), dt_param_grid, cv=5, scoring='accuracy')
+dt_grid_search.fit(X_train, y_train)
+dt_best_model = dt_grid_search.best_estimator_
+dt_preds_best = dt_best_model.predict(X_test)
+
+st.write("## Decision Tree Best Params")
+st.write(dt_grid_search.best_params_)
+st.write("Decision Tree Best Accuracy:", accuracy_score(y_test, dt_preds_best))
+st.write("Precision:", precision_score(y_test, dt_preds_best, average='weighted'))
+st.write("Recall:", recall_score(y_test, dt_preds_best, average='weighted'))
+st.write("F1 Score:", f1_score(y_test, dt_preds_best, average='weighted'))
+
+# Penyesuaian hiperparameter untuk SVM
+svm_param_grid = {
+    'C': [0.1, 1, 10, 100],
+    'kernel': ['linear', 'rbf', 'poly']
+}
+svm_grid_search = GridSearchCV(SVC(), svm_param_grid, cv=5, scoring='accuracy')
+svm_grid_search.fit(X_train, y_train)
+svm_best_model = svm_grid_search.best_estimator_
+svm_preds_best = svm_best_model.predict(X_test)
+
+st.write("## SVM Best Params")
+st.write(svm_grid_search.best_params_)
+st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
+st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
+st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
+st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
+
 # Menampilkan peta nilai
 menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
 profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))

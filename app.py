@@ -14,15 +14,12 @@ import json
 # Menambahkan CSS untuk latar belakang
 st.markdown(
     """
-   <style>
-    .reportview-container {
+    <style>
+    .reportview-container .main .block-container {
         background-color: #f0f0f0; /* Warna latar belakang utama */
     }
     .sidebar .sidebar-content {
         background-color: #ffffff; /* Warna latar belakang sidebar */
-    }
-    .main .block-container {
-        background-color: #ffffff; /* Warna latar belakang konten utama */
     }
     </style>
     """,
@@ -40,7 +37,7 @@ def load_data():
 
 data = load_data()
 st.write("## Dataset")
-data
+st.write(data)
 
 # Menampilkan deskripsi data
 st.write("## Data Info")

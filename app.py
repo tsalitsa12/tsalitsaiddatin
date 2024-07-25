@@ -11,12 +11,15 @@ from sklearn.svm import SVC
 
 st.title('Restaurant Menu Optimization')
 
-# Stage 1: Load and display dataset
-st.header('Stage 1: Load and Display Dataset')
-uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
-if uploaded_file:
-    data = pd.read_csv(uploaded_file)
-    st.write(data.head())
+# Memuat dataset
+@st.cache
+def load_data():
+    data = pd.read_csv("restaurant_menu_optimization_data.csv")
+    return data
+
+data = load_data()
+st.write("## Dataset")
+data
 
     # Descriptive statistics
     st.subheader('Descriptive Statistics')

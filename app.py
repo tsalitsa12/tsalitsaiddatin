@@ -48,7 +48,7 @@ sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
 st.pyplot(fig)
 
 # Pra-pemrosesan data
-st.write("## pemrosesan data")
+st.write("## Stage 2")
 label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
 data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
@@ -137,14 +137,31 @@ sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
 st.pyplot(fig)
 
 # Cross-validation untuk setiap model
-log_cv_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
-dt_cv_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
-svm_cv_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
+# Mendefinisikan model dengan parameter terbaik
+log_model = LogisticRegression(C=0.01, solver='liblinear')
+dt_model = DecisionTreeClassifier(max_depth=3, min_samples_split=2, min_samples_leaf=1)
+svm_model = SVC(C=100, gamma=0.01, kernel='rbf')
 
-st.write("## Cross-validation Scores")
-st.write(f"Logistic Regression CV Accuracy: {log_cv_scores.mean()}")
-st.write(f"Decision Tree CV Accuracy: {dt_cv_scores.mean()}")
-st.write(f"SVM CV Accuracy: {svm_cv_scores.mean()}")
+# Implementasi cross-validation
+log_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
+dt_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
+svm_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
+
+# Menampilkan hasil cross-validation dengan Streamlit
+st.title('Model Evaluation with Cross-Validation')
+
+# Menampilkan hasil cross-validation
+st.subheader('Logistic Regression')
+st.write('Cross-Validation Accuracies:', log_scores)
+st.write('Mean CV Accuracy:', log_scores.mean())
+
+st.subheader('Decision Tree')
+st.write('Cross-Validation Accuracies:', dt_scores)
+st.write('Mean CV Accuracy:', dt_scores.mean())
+
+st.subheader('SVM')
+st.write('Cross-Validation Accuracies:', svm_scores)
+st.write('Mean CV Accuracy:', svm_scores.mean())
 
 # Penyesuaian hiperparameter untuk Logistic Regression
 log_param_grid = {

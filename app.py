@@ -58,6 +58,16 @@ st.write(data)
 
 scaler = StandardScaler()
 data[['Price']] = scaler.fit_transform(data[['Price']])
+
+# Menampilkan peta nilai
+menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
+profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
+
+st.write("## Mapping Kategori Menu")
+st.write(menu_category_mapping)
+st.write("## Mapping Profitabilitas")
+st.write(profitability_mapping)
+
 # Memisahkan fitur dan target
 X = data[['Price']]
 y = data['Profitability']

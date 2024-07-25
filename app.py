@@ -211,3 +211,9 @@ st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
 st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
 st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
 st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
+
+# Menentukan model terbaik
+best_model = results_df.loc[results_df['Mean Accuracy'].idxmax()]
+
+st.subheader('Best Model')
+st.write(f"Model terbaik adalah {best_model['Model']} dengan Mean CV Accuracy: {best_model['Mean Accuracy']:.4f}")

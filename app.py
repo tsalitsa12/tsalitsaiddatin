@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import io
 
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
@@ -20,12 +21,15 @@ def load_data():
 
 data = load_data()
 
-"""stage 1"""
-
 # Menampilkan deskripsi data
 st.write("## Data Info")
-st.write(data.info())
-st.write("## Data Describe")
+
+buffer = io.StringIO()
+data.info(buf=buffer)
+s = buffer.getvalue()
+st.text(s)
+
+st.write("## Descriptive Statistics")
 st.write(data.describe())
 
 # Visualisasi distribusi kategori menu
@@ -40,8 +44,6 @@ fig, ax = plt.subplots()
 sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
 st.pyplot(fig)
 
-"""stage 2"""
-
 # Pra-pemrosesan data
 label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
@@ -50,8 +52,6 @@ data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability']
 
 scaler = StandardScaler()
 data[['Price']] = scaler.fit_transform(data[['Price']])
-
-"""stage 3"""
 
 # Memisahkan fitur dan target
 X = data[['Price']]

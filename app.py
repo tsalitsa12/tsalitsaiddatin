@@ -213,6 +213,9 @@ st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
 st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
 
 # Menentukan model terbaik
-best_model = max(accuracy_scores, key=accuracy_scores.get)
+best_model_name = max(accuracy_scores, key=accuracy_scores.get)
+best_model_accuracy = accuracy_scores[best_model_name]
+
+# Menampilkan model terbaik dengan Streamlit
 st.subheader('Best Model')
-st.write(f'The best model is {best_model} with Mean CV Accuracy: {accuracy_scores[best_model]:.4f}')
+st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")

@@ -39,8 +39,8 @@ data = load_data()
 # Menampilkan konten dalam kotak bergulir
 st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
 
-st.markdown("## Dataset")
-st.write(data)
+st.write("## Dataset")
+st.markdown(data)
 
 # Menampilkan deskripsi data
 st.write("## Data Info")

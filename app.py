@@ -81,8 +81,8 @@ elif menu == "Data Preprocessing":
 
     st.write("### Label Profitabilitas")
     st.json(profitability_mapping, expanded=True)
-# Menu keempat: Model Training and Comparison
-elif menu == "Model Training and Comparison3":
+# Menu keempat: Stage 2 dan 3
+elif menu == "Model Training and Comparison":
     st.write("## Model Training and Comparison")
 
     # Memisahkan fitur dan target

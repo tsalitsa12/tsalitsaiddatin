@@ -15,7 +15,7 @@ import json
 st.title('Restaurant Menu Optimization')
 
 # Membuat sidebar untuk navigasi
-menu = st.sidebar.selectbox("Menu", ["Data Description", "Data Info and Statistics", "Stage 1", "Stage 2 and 3"])
+menu = st.sidebar.selectbox("Menu", ["Introduction", "Dataset Selection and Exploration", "Data Preprocessing", "Model Training and Comparison"])
 
 # Fungsi untuk memuat dataset
 @st.cache
@@ -26,16 +26,16 @@ def load_data():
 data = load_data()
 
 # Menu pertama: Deskripsi Data
-if menu == "Data Description":
-    st.write("### Dataset")
+if menu == "Introduction":
+    st.write("### Dataset Predict Restaurant Menu Items Profitability")
     st.write(data)
     # Isi deskripsi sesuai keinginan Anda di sini.
-    st.write("### Overview")
-    st.write("This application is designed to analyze and optimize restaurant menu items. The dataset includes various features such as category, ingredients, price, and profitability.")
+    st.write("### Description")
+    st.write("Dataset ini berisi informasi tentang berbagai item menu dari sebuah restoran, termasuk profitabilitasnya. Data ini dikumpulkan untuk menganalisis dan meningkatkan menu restoran dengan mengidentifikasi item-item yang paling menguntungkan dan yang kurang menguntungkan.")
 
 # Menu kedua: Data Info dan Statistik
-elif menu == "Data Info and Statistics":
-    st.write("### Dataset")
+elif menu == "Dataset Selection and Exploration":
+    st.write("### Dataset Predict Restaurant Menu Items Profitability")
     st.write(data)
     st.write("### Data Info")
 
@@ -58,9 +58,9 @@ elif menu == "Data Info and Statistics":
     st.pyplot(fig)
 
 # Menu ketiga: Stage 1
-elif menu == "Stage 1":
-    st.write("## Stage 1")
-    st.write("### Dataset")
+elif menu == "Data Preprocessing":
+    st.write("## Data Preprocessing")
+    st.write("### Data sebelum transformasi")
     st.write(data)
     st.write("### Data setelah transformasi")
     label_encoder_menu = LabelEncoder()
@@ -76,14 +76,14 @@ elif menu == "Stage 1":
     menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
     profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
 
-    st.write("### Mapping Kategori Menu")
+    st.write("### Label Kategori Menu")
     st.json(menu_category_mapping, expanded=True)
 
-    st.write("### Mapping Profitabilitas")
+    st.write("### Label Profitabilitas")
     st.json(profitability_mapping, expanded=True)
-# Menu keempat: Stage 2 dan 3
-elif menu == "Stage 2 and 3":
-    st.write("## Stage 2 and 3")
+# Menu keempat: Model Training and Comparison
+elif menu == "Model Training and Comparison3":
+    st.write("## Model Training and Comparison")
 
     # Memisahkan fitur dan target
     X = data[['Price']]

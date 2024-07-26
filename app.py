@@ -40,7 +40,7 @@ data = load_data()
 st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
 
 st.markdown("## Dataset")
-st.markdown(data)
+st.write(data)
 
 # Menampilkan deskripsi data
 st.write("## Data Info")

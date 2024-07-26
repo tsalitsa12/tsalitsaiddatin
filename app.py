@@ -16,7 +16,7 @@ st.markdown(
     """
     <style>
     .main {
-        background-color: #f0f0f5;
+        background-color: #FFF8DC;
     }
     .block-container {
         padding: 2rem;

@@ -27,16 +27,14 @@ data = load_data()
 
 # Menu pertama: Deskripsi Data
 if menu == "Data Description":
-    st.write("## Data Description")
-    st.write("This section will contain information about the dataset, objectives of the analysis, and other descriptive text.")
+    st.write("### Dataset")
+    st.write(data)
     # Isi deskripsi sesuai keinginan Anda di sini.
     st.write("### Overview")
     st.write("This application is designed to analyze and optimize restaurant menu items. The dataset includes various features such as category, ingredients, price, and profitability.")
 
 # Menu kedua: Data Info dan Statistik
 elif menu == "Data Info and Statistics":
-    st.write("## Data Info and Statistics")
-    st.write("This section provides basic information about the dataset, such as data types and summary statistics.")
     st.write("### Dataset")
     st.write(data)
     st.write("### Data Info")
@@ -62,6 +60,8 @@ elif menu == "Data Info and Statistics":
 # Menu ketiga: Stage 1
 elif menu == "Stage 1":
     st.write("## Stage 1")
+    st.write("### Dataset")
+    st.write(data)
     st.write("### Data setelah transformasi")
     label_encoder_menu = LabelEncoder()
     label_encoder_profit = LabelEncoder()

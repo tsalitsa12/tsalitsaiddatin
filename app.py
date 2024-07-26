@@ -154,7 +154,22 @@ elif menu == "Stage 3":
         'solver': ['liblinear', 'lbfgs']
     }
     log_grid_search = GridSearchCV(LogisticRegression(), log_param_grid, cv=5, scoring='accuracy')
-    log_grid_search.fit(X_train, y_train)
+
+    # Tambahkan pengecekan sebelum fitting
+    st.write("Tipe Data X_train:", X_train.dtypes)
+    st.write("Tipe Data y_train:", y_train.dtypes)
+    st.write("Apakah ada nilai hilang di X_train?", X_train.isnull().sum())
+    st.write("Apakah ada nilai hilang di y_train?", y_train.isnull().sum())
+    st.write("Ukuran X_train:", X_train.shape)
+    st.write("Ukuran y_train:", y_train.shape)
+
+    try:
+        log_grid_search.fit(X_train, y_train)
+    except Exception as e:
+        st.write("Terjadi kesalahan saat fitting Logistic Regression GridSearchCV:")
+        st.write(e)
+        st.stop()
+
     log_best_model = log_grid_search.best_estimator_
     log_preds_best = log_best_model.predict(X_test)
 
@@ -164,37 +179,3 @@ elif menu == "Stage 3":
     st.write("Precision:", precision_score(y_test, log_preds_best, average='weighted'))
     st.write("Recall:", recall_score(y_test, log_preds_best, average='weighted'))
     st.write("F1 Score:", f1_score(y_test, log_preds_best, average='weighted'))
-
-    # Penyesuaian hiperparameter untuk Decision Tree
-    dt_param_grid = {
-        'max_depth': [3, 5, 7, 10, None],
-        'min_samples_split': [2, 5, 10]
-    }
-    dt_grid_search = GridSearchCV(DecisionTreeClassifier(), dt_param_grid, cv=5, scoring='accuracy')
-    dt_grid_search.fit(X_train, y_train)
-    dt_best_model = dt_grid_search.best_estimator_
-    dt_preds_best = dt_best_model.predict(X_test)
-
-    st.write("### Decision Tree Best Params")
-    st.write(dt_grid_search.best_params_)
-    st.write("Decision Tree Best Accuracy:", accuracy_score(y_test, dt_preds_best))
-    st.write("Precision:", precision_score(y_test, dt_preds_best, average='weighted'))
-    st.write("Recall:", recall_score(y_test, dt_preds_best, average='weighted'))
-    st.write("F1 Score:", f1_score(y_test, dt_preds_best, average='weighted'))
-
-    # Penyesuaian hiperparameter untuk SVM
-    svm_param_grid = {
-        'C': [0.1, 1, 10, 100],
-        'kernel': ['linear', 'rbf', 'poly']
-    }
-    svm_grid_search = GridSearchCV(SVC(), svm_param_grid, cv=5, scoring='accuracy')
-    svm_grid_search.fit(X_train, y_train)
-    svm_best_model = svm_grid_search.best_estimator_
-    svm_preds_best = svm_best_model.predict(X_test)
-
-    st.write("### SVM Best Params")
-    st.write(svm_grid_search.best_params_)
-    st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
-    st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
-    st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
-    st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))

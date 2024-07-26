@@ -16,10 +16,17 @@ st.markdown(
     """
     <style>
     .main {
-        background-color: #FFF8DC;
+        background-color: #f0f0f5;
     }
     .block-container {
         padding: 2rem;
+    }
+    .content-box {
+        background-color: #e0f7fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
     }
     </style>
     """, unsafe_allow_html=True

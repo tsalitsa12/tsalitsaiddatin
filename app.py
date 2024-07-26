@@ -23,13 +23,14 @@ st.markdown("""
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan kotak */
     }
     </style>
+    <div class="scrollable-box">
     """, unsafe_allow_html=True)
 
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
 
 # Memuat dataset
-@st.cache
+@st.cache_data
 def load_data():
     data = pd.read_csv("restaurant_menu_optimization_data.csv")
     return data
@@ -37,10 +38,8 @@ def load_data():
 data = load_data()
 
 # Menampilkan konten dalam kotak bergulir
-st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
-
 st.write("## Dataset")
-st.markdown(data)
+st.write(data)
 
 # Menampilkan deskripsi data
 st.write("## Data Info")
@@ -251,3 +250,6 @@ if accuracy_scores:
 else:
     st.write("### Best Model")
     st.write("Tidak ada data untuk menentukan model terbaik.")
+
+# Menutup div scrollable-box
+st.markdown('</div>', unsafe_allow_html=True)

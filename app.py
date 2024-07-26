@@ -223,3 +223,19 @@ elif menu == "Stage 3":
         'Decision Tree': dt_scores.mean(),
         'SVM': svm_scores.mean()
     }
+    # Pastikan accuracy_scores tidak kosong sebelum menentukan model terbaik
+    if accuracy_scores:
+        try:
+            # Menentukan model terbaik
+            best_model_name = max(accuracy_scores, key=accuracy_scores.get)
+            best_model_accuracy = accuracy_scores[best_model_name]
+
+            # Menampilkan model terbaik dengan Streamlit
+            st.write("### Best Model")
+            st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")
+        except Exception as e:
+            st.write("### Error")
+            st.write(f"Terjadi kesalahan: {e}")
+    else:
+        st.write("### Best Model")
+        st.write("Tidak ada data untuk menentukan model terbaik.")

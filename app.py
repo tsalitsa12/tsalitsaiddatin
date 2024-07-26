@@ -11,63 +11,91 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import io
 import json
 
-# Fungsi untuk memuat data
+# Judul aplikasi
+st.title('Restaurant Menu Optimization')
+
+# Menu navigasi di sidebar
+menu = st.sidebar.radio("Pilih Halaman", ["Data Description", "Stage 1", "Stage 2", "Stage 3"])
+
+# Fungsi untuk memuat dataset
 @st.cache
 def load_data():
     data = pd.read_csv("restaurant_menu_optimization_data.csv")
     return data
 
-# Fungsi untuk menampilkan informasi data
-def display_data_info(data):
+# Konten untuk menu Data Description
+if menu == "Data Description":
+    st.write("## Deskripsi Data")
+    st.write("Masukkan deskripsi data di sini...")  # Placeholder untuk deskripsi data
+
+# Konten untuk menu Stage 1
+elif menu == "Stage 1":
+    st.write("## Stage 1")
+    # Memuat dataset
+    data = load_data()
+    
+    st.write("## Dataset")
+    st.write(data)
+
+    # Menampilkan deskripsi data
+    st.write("## Data Info")
+
     buffer = io.StringIO()
     data.info(buf=buffer)
     s = buffer.getvalue()
     st.text(s)
 
-# Fungsi untuk menampilkan statistik deskriptif
-def display_data_statistics(data):
+    st.write("## Descriptive Statistics")
     st.write(data.describe())
 
-# Fungsi untuk menampilkan visualisasi distribusi kategori menu
-def display_category_distribution(data):
+    # Visualisasi distribusi kategori menu
+    st.write("## Distribusi Kategori Menu")
     fig, ax = plt.subplots()
     sns.countplot(x='MenuCategory', data=data, ax=ax)
     st.pyplot(fig)
 
-# Fungsi untuk menampilkan visualisasi hubungan antara harga dan profitabilitas
-def display_price_vs_profitability(data):
+    # Visualisasi hubungan antara Harga dan Profitabilitas
+    st.write("## Harga vs Profitabilitas")
     fig, ax = plt.subplots()
     sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
     st.pyplot(fig)
 
-# Fungsi untuk pra-pemrosesan data
-def preprocess_data(data):
+# Konten untuk menu Stage 2
+elif menu == "Stage 2":
+    st.write("## Stage 2")
+    # Pra-pemrosesan data
+    data = load_data()
     label_encoder_menu = LabelEncoder()
     label_encoder_profit = LabelEncoder()
     data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
     data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability'])
+
+    st.write("## Data setelah transformasi")
+    st.write(data)
+
     scaler = StandardScaler()
     data[['Price']] = scaler.fit_transform(data[['Price']])
-    return data, label_encoder_menu, label_encoder_profit
 
-# Fungsi untuk menampilkan peta nilai
-def display_mapping(label_encoder_menu, label_encoder_profit):
+    # Menampilkan peta nilai
     menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
     profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
+
     st.write("## Mapping Kategori Menu")
     st.json(menu_category_mapping, expanded=True)
+
     st.write("## Mapping Profitabilitas")
     st.json(profitability_mapping, expanded=True)
 
-# Fungsi untuk membagi data menjadi fitur dan target
-def split_data(data):
+    # Memisahkan fitur dan target
     X = data[['Price']]
     y = data['Profitability']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    return X_train, X_test, y_train, y_test
 
-# Fungsi untuk evaluasi model
-def evaluate_models(X_train, X_test, y_train, y_test):
+    # Memisahkan data latih dan uji
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    # Model selection
+    st.write("## Model Evaluation")
+
     # Logistic Regression
     log_model = LogisticRegression()
     log_model.fit(X_train, y_train)
@@ -104,10 +132,6 @@ def evaluate_models(X_train, X_test, y_train, y_test):
         'F1 Score': [log_f1, dt_f1, svm_f1]
     })
 
-    return model_performance
-
-# Fungsi untuk menampilkan hasil evaluasi model
-def display_model_performance(model_performance):
     st.write(model_performance)
 
     # Visualisasi hasil
@@ -128,60 +152,101 @@ def display_model_performance(model_performance):
     sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
     st.pyplot(fig)
 
-# Fungsi utama untuk menjalankan aplikasi Streamlit
-def main():
-    # Menambahkan CSS untuk latar belakang
-    st.markdown(
-        """
-       <style>
-        .reportview-container {
-            background-color: #f0f0f0; /* Warna latar belakang utama */
-        }
-        .sidebar .sidebar-content {
-            background-color: #ffffff; /* Warna latar belakang sidebar */
-        }
-        .main .block-container {
-            background-color: #ffffff; /* Warna latar belakang konten utama */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+elif menu == "Stage 3":
+    st.write("## Stage 3")
+    
+    # Penyesuaian hiperparameter untuk Logistic Regression
+    log_param_grid = {
+        'C': [0.01, 0.1, 1, 10, 100],
+        'solver': ['liblinear', 'lbfgs']
+    }
+    log_grid_search = GridSearchCV(LogisticRegression(), log_param_grid, cv=5, scoring='accuracy')
+    log_grid_search.fit(X_train, y_train)
+    log_best_model = log_grid_search.best_estimator_
+    log_preds_best = log_best_model.predict(X_test)
 
-    st.sidebar.title("Menu")
-    menu = st.sidebar.radio("Pilih Menu:", ["Deskripsi Data", "Stage 1", "Stage 2", "Stage 3"])
+    st.write("## Logistic Regression Best Params")
+    st.write(log_grid_search.best_params_)
+    st.write("Logistic Regression Best Accuracy:", accuracy_score(y_test, log_preds_best))
+    st.write("Precision:", precision_score(y_test, log_preds_best, average='weighted'))
+    st.write("Recall:", recall_score(y_test, log_preds_best, average='weighted'))
+    st.write("F1 Score:", f1_score(y_test, log_preds_best, average='weighted'))
 
-    data = load_data()
+    # Penyesuaian hiperparameter untuk Decision Tree
+    dt_param_grid = {
+        'max_depth': [3, 5, 7, 10, None],
+        'min_samples_split': [2, 5, 10]
+    }
+    dt_grid_search = GridSearchCV(DecisionTreeClassifier(), dt_param_grid, cv=5, scoring='accuracy')
+    dt_grid_search.fit(X_train, y_train)
+    dt_best_model = dt_grid_search.best_estimator_
+    dt_preds_best = dt_best_model.predict(X_test)
 
-    if menu == "Deskripsi Data":
-        st.title("Deskripsi Data")
-        st.write("Silakan masukkan deskripsi data Anda di sini.")
-        st.write(data)
-        st.write("## Data Info")
-        display_data_info(data)
-        st.write("## Descriptive Statistics")
-        display_data_statistics(data)
+    st.write("## Decision Tree Best Params")
+    st.write(dt_grid_search.best_params_)
+    st.write("Decision Tree Best Accuracy:", accuracy_score(y_test, dt_preds_best))
+    st.write("Precision:", precision_score(y_test, dt_preds_best, average='weighted'))
+    st.write("Recall:", recall_score(y_test, dt_preds_best, average='weighted'))
+    st.write("F1 Score:", f1_score(y_test, dt_preds_best, average='weighted'))
 
-    elif menu == "Stage 1":
-        st.title("Stage 1: Explorasi Data")
-        st.write("## Distribusi Kategori Menu")
-        display_category_distribution(data)
-        st.write("## Harga vs Profitabilitas")
-        display_price_vs_profitability(data)
+    # Penyesuaian hiperparameter untuk SVM
+    svm_param_grid = {
+        'C': [0.1, 1, 10, 100],
+        'kernel': ['linear', 'rbf', 'poly']
+    }
+    svm_grid_search = GridSearchCV(SVC(), svm_param_grid, cv=5, scoring='accuracy')
+    svm_grid_search.fit(X_train, y_train)
+    svm_best_model = svm_grid_search.best_estimator_
+    svm_preds_best = svm_best_model.predict(X_test)
 
-    elif menu == "Stage 2":
-        st.title("Stage 2: Pra-pemrosesan Data")
-        data, label_encoder_menu, label_encoder_profit = preprocess_data(data)
-        st.write("## Data setelah transformasi")
-        st.write(data)
-        display_mapping(label_encoder_menu, label_encoder_profit)
+    st.write("## SVM Best Params")
+    st.write(svm_grid_search.best_params_)
+    st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
+    st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))
+    st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
+    st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
 
-    elif menu == "Stage 3":
-        st.title("Stage 3: Evaluasi Model")
-        X_train, X_test, y_train, y_test = split_data(data)
-        model_performance = evaluate_models(X_train, X_test, y_train, y_test)
-        display_model_performance(model_performance)
+    # Mendefinisikan model dengan parameter terbaik
+    log_model = LogisticRegression(C=0.01, solver='liblinear')
+    dt_model = DecisionTreeClassifier(max_depth=3, min_samples_split=2)
+    svm_model = SVC(C=100, kernel='rbf')
 
-# Menjalankan aplikasi utama
-if __name__ == "__main__":
-    main()
+    # Implementasi cross-validation
+    log_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
+    dt_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
+    svm_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
+
+    # Menyiapkan DataFrame untuk hasil
+    results = pd.DataFrame({
+        'Model': ['Logistic Regression', 'Decision Tree', 'SVM'],
+        'Cross-Validation Scores': [list(log_scores), list(dt_scores), list(svm_scores)],
+        'Mean CV Accuracy': [log_scores.mean(), dt_scores.mean(), svm_scores.mean()]
+    })
+
+    # Menampilkan hasil dengan Streamlit
+    st.subheader('Cross-Validation Results')
+    st.write(results)
+
+    # Menyimpan hasil akurasi
+    accuracy_scores = {
+        'Logistic Regression': log_scores.mean(),
+        'Decision Tree': dt_scores.mean(),
+        'SVM': svm_scores.mean()
+    }
+
+    # Pastikan accuracy_scores tidak kosong sebelum menentukan model terbaik
+    if accuracy_scores:
+        try:
+            # Menentukan model terbaik
+            best_model_name = max(accuracy_scores, key=accuracy_scores.get)
+            best_model_accuracy = accuracy_scores[best_model_name]
+
+            # Menampilkan model terbaik dengan Streamlit
+            st.subheader('Best Model')
+            st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")
+        except Exception as e:
+            st.subheader('Error')
+            st.write(f"Terjadi kesalahan: {e}")
+    else:
+        st.subheader('Best Model')
+        st.write("Tidak ada data untuk menentukan model terbaik.")

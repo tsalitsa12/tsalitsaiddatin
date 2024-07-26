@@ -11,38 +11,22 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import io
 import json
 
-# CSS untuk mendesain kotak dan scrollbar
-st.markdown("""
-    <style>
-    .scrollable-box {
-        height: 800px; /* Sesuaikan tinggi kotak */
-        overflow-y: auto; /* Scroll vertical */
-        border: 2px solid #4CAF50; /* Warna border kotak */
-        padding: 20px; /* Jarak di dalam kotak */
-        border-radius: 10px; /* Sudut kotak melengkung */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan kotak */
-    }
-    </style>
-    <div class="scrollable-box">
-    """, unsafe_allow_html=True)
-
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
 
 # Memuat dataset
-@st.cache_data
+@st.cache
 def load_data():
     data = pd.read_csv("restaurant_menu_optimization_data.csv")
     return data
 
 data = load_data()
-
-# Menampilkan konten dalam kotak bergulir
 st.write("## Dataset")
-st.write(data)
+data
 
 # Menampilkan deskripsi data
 st.write("## Data Info")
+
 buffer = io.StringIO()
 data.info(buf=buffer)
 s = buffer.getvalue()
@@ -210,8 +194,8 @@ svm_model = SVC(C=100, gamma=0.01, kernel='rbf')
 
 # Implementasi cross-validation
 log_scores = cross_val_score(log_model, X, y, cv=5, scoring='accuracy')
-dt_scores = cross_val_score(dt_best_model, X, y, cv=5, scoring='accuracy')
-svm_scores = cross_val_score(svm_best_model, X, y, cv=5, scoring='accuracy')
+dt_scores = cross_val_score(dt_model, X, y, cv=5, scoring='accuracy')
+svm_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
 
 # Menyiapkan DataFrame untuk hasil
 results = pd.DataFrame({
@@ -221,10 +205,10 @@ results = pd.DataFrame({
 })
 
 # Menampilkan hasil dengan Streamlit
-st.write("## Model Evaluation with Cross-Validation")
+st.title('Model Evaluation with Cross-Validation')
 
 # Tabel hasil cross-validation
-st.write("### Cross-Validation Results")
+st.subheader('Cross-Validation Results')
 st.write(results)
 
 # Menyimpan hasil akurasi
@@ -242,14 +226,11 @@ if accuracy_scores:
         best_model_accuracy = accuracy_scores[best_model_name]
 
         # Menampilkan model terbaik dengan Streamlit
-        st.write("### Best Model")
+        st.subheader('Best Model')
         st.write(f"Model terbaik adalah {best_model_name} dengan Mean CV Accuracy: {best_model_accuracy:.4f}")
     except Exception as e:
-        st.write("### Error")
+        st.subheader('Error')
         st.write(f"Terjadi kesalahan: {e}")
 else:
-    st.write("### Best Model")
+    st.subheader('Best Model')
     st.write("Tidak ada data untuk menentukan model terbaik.")
-
-# Menutup div scrollable-box
-st.markdown('</div>', unsafe_allow_html=True)

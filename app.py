@@ -11,13 +11,24 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import io
 import json
 
+# CSS untuk mendesain kotak dan scrollbar
+st.markdown("""
+    <style>
+    .scrollable-box {
+        height: 800px; /* Sesuaikan tinggi kotak */
+        overflow-y: auto; /* Scroll vertical */
+        border: 2px solid #4CAF50; /* Warna border kotak */
+        padding: 20px; /* Jarak di dalam kotak */
+        border-radius: 10px; /* Sudut kotak melengkung */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan kotak */
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Judul aplikasi
 st.title('Restaurant Menu Optimization')
 
-# Membuat sidebar untuk navigasi
-menu = st.sidebar.selectbox("Menu", ["Introduction", "Dataset Selection and Exploration", "Data Preprocessing", "Model Training and Comparison"])
-
-# Fungsi untuk memuat dataset
+# Memuat dataset
 @st.cache
 def load_data():
     data = pd.read_csv("restaurant_menu_optimization_data.csv")
@@ -25,65 +36,57 @@ def load_data():
 
 data = load_data()
 
-# Menu pertama: Deskripsi Data
-if menu == "Introduction":
-    st.write("### Dataset Predict Restaurant Menu Items Profitability")
+# Konten utama
+with st.container():
+    st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
+    
+    st.write("## Dataset")
     st.write(data)
-    # Isi deskripsi sesuai keinginan Anda di sini.
-    st.write("### Description")
-    st.write("Dataset ini berisi informasi tentang berbagai item menu dari sebuah restoran, termasuk profitabilitasnya. Data ini dikumpulkan untuk menganalisis dan meningkatkan menu restoran dengan mengidentifikasi item-item yang paling menguntungkan dan yang kurang menguntungkan.")
 
-# Menu kedua: Data Info dan Statistik
-elif menu == "Dataset Selection and Exploration":
-    st.write("### Dataset Predict Restaurant Menu Items Profitability")
-    st.write(data)
-    st.write("### Data Info")
-
+    # Menampilkan deskripsi data
+    st.write("## Data Info")
     buffer = io.StringIO()
     data.info(buf=buffer)
     s = buffer.getvalue()
     st.text(s)
 
-    st.write("### Descriptive Statistics")
+    st.write("## Descriptive Statistics")
     st.write(data.describe())
 
-    st.write("### Distribusi Kategori Menu")
+    # Visualisasi distribusi kategori menu
+    st.write("## Distribusi Kategori Menu")
     fig, ax = plt.subplots()
     sns.countplot(x='MenuCategory', data=data, ax=ax)
     st.pyplot(fig)
 
-    st.write("### Harga vs Profitabilitas")
+    # Visualisasi hubungan antara Harga dan Profitabilitas
+    st.write("## Harga vs Profitabilitas")
     fig, ax = plt.subplots()
     sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
     st.pyplot(fig)
 
-# Menu ketiga: Stage 1
-elif menu == "Data Preprocessing":
-    st.write("## Data Preprocessing")
-    st.write("### Data sebelum transformasi")
-    st.write(data)
-    st.write("### Data setelah transformasi")
+    # Pra-pemrosesan data
+    st.write("## Stage 2")
     label_encoder_menu = LabelEncoder()
     label_encoder_profit = LabelEncoder()
     data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
     data['Profitability'] = label_encoder_profit.fit_transform(data['Profitability'])
 
+    st.write("## Data setelah transformasi")
     st.write(data)
 
     scaler = StandardScaler()
     data[['Price']] = scaler.fit_transform(data[['Price']])
 
+    # Menampilkan peta nilai
     menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
     profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
 
-    st.write("### Label Kategori Menu")
+    st.write("## Mapping Kategori Menu")
     st.json(menu_category_mapping, expanded=True)
 
-    st.write("### Label Profitabilitas")
+    st.write("## Mapping Profitabilitas")
     st.json(profitability_mapping, expanded=True)
-# Menu keempat: Stage 2 dan 3
-elif menu == "Model Training and Comparison":
-    st.write("## Model Training and Comparison")
 
     # Memisahkan fitur dan target
     X = data[['Price']]
@@ -93,7 +96,7 @@ elif menu == "Model Training and Comparison":
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
     # Model selection
-    st.write("### Model Evaluation")
+    st.write("## Model Evaluation")
 
     # Logistic Regression
     log_model = LogisticRegression()
@@ -134,7 +137,7 @@ elif menu == "Model Training and Comparison":
     st.write(model_performance)
 
     # Visualisasi hasil
-    st.write("### Model Performance Comparison")
+    st.write("## Model Performance Comparison")
     fig, ax = plt.subplots()
     sns.barplot(x='Model', y='Accuracy', data=model_performance, ax=ax)
     st.pyplot(fig)
@@ -161,7 +164,7 @@ elif menu == "Model Training and Comparison":
     log_best_model = log_grid_search.best_estimator_
     log_preds_best = log_best_model.predict(X_test)
 
-    st.write("### Logistic Regression Best Params")
+    st.write("## Logistic Regression Best Params")
     st.write(log_grid_search.best_params_)
     st.write("Logistic Regression Best Accuracy:", accuracy_score(y_test, log_preds_best))
     st.write("Precision:", precision_score(y_test, log_preds_best, average='weighted'))
@@ -178,7 +181,7 @@ elif menu == "Model Training and Comparison":
     dt_best_model = dt_grid_search.best_estimator_
     dt_preds_best = dt_best_model.predict(X_test)
 
-    st.write("### Decision Tree Best Params")
+    st.write("## Decision Tree Best Params")
     st.write(dt_grid_search.best_params_)
     st.write("Decision Tree Best Accuracy:", accuracy_score(y_test, dt_preds_best))
     st.write("Precision:", precision_score(y_test, dt_preds_best, average='weighted'))
@@ -195,7 +198,7 @@ elif menu == "Model Training and Comparison":
     svm_best_model = svm_grid_search.best_estimator_
     svm_preds_best = svm_best_model.predict(X_test)
 
-    st.write("### SVM Best Params")
+    st.write("## SVM Best Params")
     st.write(svm_grid_search.best_params_)
     st.write("SVM Best Accuracy:", accuracy_score(y_test, svm_preds_best))
     st.write("Precision:", precision_score(y_test, svm_preds_best, average='weighted'))

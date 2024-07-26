@@ -217,13 +217,13 @@ elif selection == "Stage 3":
 
     # Menyiapkan DataFrame untuk hasil
     results = pd.DataFrame({
-    'Model': ['Logistic Regression', 'Decision Tree', 'SVM'],
-    'Cross-Validation Scores': [list(log_scores), list(dt_scores), list(svm_scores)],
-    'Mean CV Accuracy': [log_scores.mean(), dt_scores.mean(), svm_scores.mean()]
+        'Model': ['Logistic Regression', 'Decision Tree', 'SVM'],
+        'Cross-Validation Scores': [list(log_scores), list(dt_scores), list(svm_scores)],
+        'Mean CV Accuracy': [log_scores.mean(), dt_scores.mean(), svm_scores.mean()]
     })
 
     # Menampilkan hasil dengan Streamlit
-    st.title('Model Evaluation with Cross-Validation')
+    st.write("## Model Evaluation with Cross-Validation")
 
     # Tabel hasil cross-validation
     st.subheader('Cross-Validation Results')
@@ -252,3 +252,4 @@ elif selection == "Stage 3":
     else:
         st.subheader('Best Model')
         st.write("Tidak ada data untuk menentukan model terbaik.")
+

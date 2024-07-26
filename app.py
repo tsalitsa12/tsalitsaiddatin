@@ -15,7 +15,7 @@ import json
 st.title('Restaurant Menu Optimization')
 
 # Membuat sidebar untuk navigasi
-menu = st.sidebar.selectbox("Menu", ["Data Description", "Stage 1", "Stage 2", "Stage 3"])
+menu = st.sidebar.selectbox("Menu", ["Data Description", "Stage 1", "Stage 2", "Stage 3", "Stage 4"])
 
 # Fungsi untuk memuat dataset
 @st.cache
@@ -199,6 +199,8 @@ elif menu == "Stage 3":
     st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
     st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
 
+elif menu == "Stage 4":
+    st.write("## Stage 4")
     # Implementasi cross-validation
     log_scores = cross_val_score(log_best_model, X, y, cv=5, scoring='accuracy')
     dt_scores = cross_val_score(dt_best_model, X, y, cv=5, scoring='accuracy')

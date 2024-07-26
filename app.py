@@ -144,10 +144,6 @@ elif menu == "Stage 2":
     sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
     st.pyplot(fig)
 
-# Menu keempat: Stage 3
-elif menu == "Stage 3":
-    st.write("## Stage 3")
-
     # Penyesuaian hiperparameter untuk Logistic Regression
     log_param_grid = {
         'C': [0.01, 0.1, 1, 10, 100],
@@ -199,8 +195,6 @@ elif menu == "Stage 3":
     st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
     st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
 
-elif menu == "Stage 4":
-    st.write("## Stage 4")
     # Implementasi cross-validation
     log_scores = cross_val_score(log_best_model, X, y, cv=5, scoring='accuracy')
     dt_scores = cross_val_score(dt_best_model, X, y, cv=5, scoring='accuracy')

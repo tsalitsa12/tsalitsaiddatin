@@ -21,9 +21,10 @@ def load_data():
     return data
 
 data = load_data()
-st.write("## Dataset")
+st.write("## Dataset Restaurant Menu Optimization")
 data
 
+st.write("##  Dataset Selection and Exploration")
 # Menampilkan deskripsi data
 st.write("## Data Info")
 
@@ -48,7 +49,7 @@ sns.boxplot(x='Profitability', y='Price', data=data, ax=ax)
 st.pyplot(fig)
 
 # Pra-pemrosesan data
-st.write("## Stage 2")
+st.write("## Data Preprocessing")
 label_encoder_menu = LabelEncoder()
 label_encoder_profit = LabelEncoder()
 data['MenuCategory'] = label_encoder_menu.fit_transform(data['MenuCategory'])
@@ -64,12 +65,13 @@ data[['Price']] = scaler.fit_transform(data[['Price']])
 menu_category_mapping = dict(zip(label_encoder_menu.classes_, label_encoder_menu.transform(label_encoder_menu.classes_)))
 profitability_mapping = dict(zip(label_encoder_profit.classes_, label_encoder_profit.transform(label_encoder_profit.classes_)))
 
-st.write("## Mapping Kategori Menu")
+st.write("## Label Kategori Menu")
 st.json(menu_category_mapping, expanded=True)
 
-st.write("## Mapping Profitabilitas")
+st.write("## Label Profitabilitas")
 st.json(profitability_mapping, expanded=True)
 
+st.write("## Model Training and Comparison")
 # Memisahkan fitur dan target
 X = data[['Price']]
 y = data['Profitability']

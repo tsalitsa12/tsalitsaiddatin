@@ -15,7 +15,7 @@ import json
 st.title('Restaurant Menu Optimization')
 
 # Membuat sidebar untuk navigasi
-menu = st.sidebar.selectbox("Menu", ["Introduction", "Dataset Selection and Exploration", "Data Preprocessing", "Model Training and Comparison"])
+menu = st.sidebar.selectbox("Menu Options", ["Introduction", "Dataset Selection and Exploration", "Data Preprocessing", "Model Training and Comparison"])
 
 # Fungsi untuk memuat dataset
 @st.cache

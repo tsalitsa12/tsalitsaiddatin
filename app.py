@@ -202,6 +202,11 @@ elif menu == "Model Training and Comparison":
     st.write("Recall:", recall_score(y_test, svm_preds_best, average='weighted'))
     st.write("F1 Score:", f1_score(y_test, svm_preds_best, average='weighted'))
 
+    # Mendefinisikan model dengan parameter terbaik
+    log_model = LogisticRegression(C=0.01, solver='liblinear')
+    dt_model = DecisionTreeClassifier(max_depth=3, min_samples_split=2, min_samples_leaf=1)
+    svm_model = SVC(C=100, gamma=0.01, kernel='rbf')
+
     # Implementasi cross-validation
     log_scores = cross_val_score(log_best_model, X, y, cv=5, scoring='accuracy')
     dt_scores = cross_val_score(dt_best_model, X, y, cv=5, scoring='accuracy')

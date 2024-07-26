@@ -144,12 +144,6 @@ elif menu == "Stage 2":
     sns.barplot(x='Model', y='F1 Score', data=model_performance, ax=ax)
     st.pyplot(fig)
 
-# Menu keempat: Stage 3
-elif menu == "Stage 3":
-    st.write("## Stage 3")
-
-    # Pastikan X_train, y_train, X_test, dan y_test sudah didefinisikan di Stage 2
-    if 'X_train' in globals() and 'y_train' in globals():
         # Penyesuaian hiperparameter untuk Logistic Regression
         log_param_grid = {
             'C': [0.01, 0.1, 1, 10, 100],
